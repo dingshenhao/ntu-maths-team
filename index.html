@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Maths Team - a Planner, Solver and Checker multi-agent system for linear equations." />
+  <title>Maths Team · 多智能体解题小队</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%2317172f'/%3E%3Crect x='15' y='30' width='8' height='19' rx='4' fill='%2312b8aa'/%3E%3Crect x='28' y='17' width='8' height='32' rx='4' fill='%23ffad20'/%3E%3Crect x='41' y='24' width='8' height='25' rx='4' fill='%23ff755c'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Maths Team 首页">
+      <span class="brand-mark">
+        <span></span><span></span><span></span>
+      </span>
+      <span>
+        <strong>Maths Team</strong>
+        <small>Agentic AI in Education</small>
+      </span>
+    </a>
+    <div class="header-actions">
+      <span class="live-pill"><i></i> 3 agents online</span>
+      <button class="language-button" id="languageButton" type="button">EN</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span>PROJECT 02</span><i></i><span>MULTI-AGENT</span></div>
+      <h1 data-zh="让三个智能体，<br><em>一起</em>解一道题。" data-en="Three agents.<br><em>One</em> reliable answer.">让三个智能体，<br><em>一起</em>解一道题。</h1>
+      <p class="hero-copy" data-zh="规划、计算、验证，各司其职。输入一组二元一次方程，看看它们如何协作、交接并纠正错误。" data-en="Planning, solving and checking - one focused role each. Enter two linear equations and watch the agents collaborate, hand off and self-correct.">规划、计算、验证，各司其职。输入一组二元一次方程，看看它们如何协作、交接并纠正错误。</p>
+      <div class="pipeline-mini" aria-label="Agent pipeline">
+        <span class="dot planner-dot"></span><strong>Planner</strong><i></i>
+        <span class="dot solver-dot"></span><strong>Solver</strong><i></i>
+        <span class="dot checker-dot"></span><strong>Checker</strong>
+      </div>
+    </section>
+
+    <section class="workspace" aria-label="Equation workspace">
+      <div class="input-panel panel">
+        <div class="panel-heading">
+          <div>
+            <span class="step-number">01</span>
+            <h2 data-zh="给小队一道题" data-en="Give the team a problem">给小队一道题</h2>
+          </div>
+          <button class="reset-button" id="resetButton" type="button" data-zh="重置" data-en="Reset">重置</button>
+        </div>
+
+        <div class="mode-tabs" role="tablist">
+          <button class="mode-tab active" id="solveTab" role="tab" aria-selected="true" data-mode="solve" type="button" data-zh="小队解题" data-en="Team solves">小队解题</button>
+          <button class="mode-tab" id="claimTab" role="tab" aria-selected="false" data-mode="claim" type="button" data-zh="挑战 Checker" data-en="Challenge Checker">挑战 Checker</button>
+        </div>
+
+        <div class="equation-editor">
+          <div class="equation-row">
+            <span class="equation-label">①</span>
+            <input id="a1" type="number" inputmode="decimal" step="any" value="2" aria-label="Equation 1 x coefficient" />
+            <span class="variable">x</span><span class="operator">+</span>
+            <input id="b1" type="number" inputmode="decimal" step="any" value="1" aria-label="Equation 1 y coefficient" />
+            <span class="variable">y</span><span class="equals">=</span>
+            <input id="c1" type="number" inputmode="decimal" step="any" value="5" aria-label="Equation 1 constant" />
+          </div>
+          <div class="equation-row">
+            <span class="equation-label">②</span>
+            <input id="a2" type="number" inputmode="decimal" step="any" value="1" aria-label="Equation 2 x coefficient" />
+            <span class="variable">x</span><span class="operator">+</span>
+            <input id="b2" type="number" inputmode="decimal" step="any" value="-1" aria-label="Equation 2 y coefficient" />
+            <span class="variable">y</span><span class="equals">=</span>
+            <input id="c2" type="number" inputmode="decimal" step="any" value="1" aria-label="Equation 2 constant" />
+          </div>
+        </div>
+
+        <div class="claim-editor" id="claimEditor" hidden>
+          <p data-zh="把一个答案直接交给 Checker，看看它会不会发现错误。" data-en="Hand a claimed answer straight to Checker and see whether it catches the error.">把一个答案直接交给 Checker，看看它会不会发现错误。</p>
+          <div class="claim-fields">
+            <label>x = <input id="claimX" type="number" inputmode="decimal" step="any" value="3" /></label>
+            <label>y = <input id="claimY" type="number" inputmode="decimal" step="any" value="2" /></label>
+          </div>
+        </div>
+
+        <button class="run-button" id="runButton" type="button">
+          <span data-zh="启动智能体小队" data-en="Run the agent team">启动智能体小队</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </button>
+
+        <div class="examples">
+          <div class="examples-title">
+            <span data-zh="快速测试" data-en="Quick tests">快速测试</span>
+            <small data-zh="来自课程任务" data-en="from the workshop">来自课程任务</small>
+          </div>
+          <div class="example-grid">
+            <button type="button" data-example="substitution"><span>01</span><b data-zh="代入法" data-en="Substitution">代入法</b><small>x + y = 4 · 3x + 2y = 16</small></button>
+            <button type="button" data-example="steps"><span>02</span><b data-zh="完整步骤" data-en="Full steps">完整步骤</b><small>7x + 5y = 81 · 3x - 2y = 14</small></button>
+            <button type="button" data-example="wrong"><span>03</span><b data-zh="驳回错解" data-en="Reject error">驳回错解</b><small>2x + y = 5 · x - y = 1</small></button>
+            <button type="button" data-example="none"><span>04</span><b data-zh="识别无解" data-en="No solution">识别无解</b><small>2x + y = 5 · 4x + 2y = 7</small></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="output-panel panel">
+        <div class="panel-heading output-heading">
+          <div>
+            <span class="step-number">02</span>
+            <h2 data-zh="协作现场" data-en="Live collaboration">协作现场</h2>
+          </div>
+          <span class="status-pill idle" id="statusPill"><i></i><span data-zh="等待任务" data-en="Standing by">等待任务</span></span>
+        </div>
+
+        <div class="empty-state" id="emptyState">
+          <div class="orbit">
+            <span class="orbit-center">∑</span>
+            <span class="orbit-node node-one">P</span>
+            <span class="orbit-node node-two">S</span>
+            <span class="orbit-node node-three">C</span>
+          </div>
+          <h3 data-zh="小队已就位" data-en="The team is ready">小队已就位</h3>
+          <p data-zh="输入方程并启动，三个智能体的思考与交接会依次出现在这里。" data-en="Enter two equations and run the team. Each agent's reasoning and handoff will appear here.">输入方程并启动，三个智能体的思考与交接会依次出现在这里。</p>
+        </div>
+
+        <div class="agent-feed" id="agentFeed" hidden>
+          <article class="agent-card planner" id="plannerCard">
+            <div class="agent-identity">
+              <div class="agent-avatar"><span></span><span></span><span></span></div>
+              <div><small>AGENT 01</small><h3>Planner</h3></div>
+              <span class="agent-state" data-state="waiting" id="plannerState">WAITING</span>
+            </div>
+            <div class="agent-message" id="plannerMessage"></div>
+            <div class="handoff"><span></span><small>HANDOFF TO SOLVER</small></div>
+          </article>
+
+          <article class="agent-card solver" id="solverCard">
+            <div class="agent-identity">
+              <div class="agent-avatar">⌁</div>
+              <div><small>AGENT 02</small><h3>Solver</h3></div>
+              <span class="agent-state" data-state="waiting" id="solverState">WAITING</span>
+            </div>
+            <div class="agent-message" id="solverMessage"></div>
+            <div class="handoff"><span></span><small>HANDOFF TO CHECKER</small></div>
+          </article>
+
+          <article class="agent-card checker" id="checkerCard">
+            <div class="agent-identity">
+              <div class="agent-avatar">✓</div>
+              <div><small>AGENT 03</small><h3>Checker</h3></div>
+              <span class="agent-state" data-state="waiting" id="checkerState">WAITING</span>
+            </div>
+            <div class="agent-message" id="checkerMessage"></div>
+          </article>
+
+          <div class="final-answer" id="finalAnswer" hidden>
+            <div><small data-zh="最终结论" data-en="Final verdict">最终结论</small><h3 id="finalTitle"></h3></div>
+            <div class="answer-values" id="answerValues"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-it-works">
+      <div class="section-heading">
+        <span class="step-number">03</span>
+        <h2 data-zh="一条可靠答案的诞生" data-en="How a reliable answer is made">一条可靠答案的诞生</h2>
+        <p data-zh="多智能体不是让多个角色重复同一件事，而是把复杂任务拆成彼此制衡的责任。" data-en="Multi-agent work is not duplicated effort. It divides a complex task into focused responsibilities that keep one another honest.">多智能体不是让多个角色重复同一件事，而是把复杂任务拆成彼此制衡的责任。</p>
+      </div>
+      <div class="role-grid">
+        <article class="role-card planner-role">
+          <span class="role-index">01</span><div class="role-icon"><i></i><i></i><i></i></div>
+          <h3>Planner</h3><p data-zh="比较代入法与消元法，选择更简单的路径，只交付方法和第一步。" data-en="Compares substitution and elimination, choosing the simpler path without solving ahead.">比较代入法与消元法，选择更简单的路径，只交付方法和第一步。</p>
+        </article>
+        <article class="role-card solver-role">
+          <span class="role-index">02</span><div class="role-icon">⌁</div>
+          <h3>Solver</h3><p data-zh="严格沿 Planner 的路径计算，清楚展示每一步，再把 x 与 y 交给 Checker。" data-en="Follows the plan, shows every calculation and hands x and y to the Checker.">严格沿 Planner 的路径计算，清楚展示每一步，再把 x 与 y 交给 Checker。</p>
+        </article>
+        <article class="role-card checker-role">
+          <span class="role-index">03</span><div class="role-icon">✓</div>
+          <h3>Checker</h3><p data-zh="把答案代回两条原方程。全部成立才确认，否则退回 Solver 重算。" data-en="Substitutes into both original equations. It confirms only when both checks pass.">把答案代回两条原方程。全部成立才确认，否则退回 Solver 重算。</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-brand"><span class="brand-mark"><span></span><span></span><span></span></span><strong>Maths Team</strong></div>
+    <p>NTU Summer School · Agentic AI in Education · Project 02</p>
+    <span>Planner → Solver → Checker</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
